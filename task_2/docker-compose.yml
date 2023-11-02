@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  clickhouse:
+    image: yandex/clickhouse-server
+    ports:
+      - "9000:8123"
+    volumes:
+      - ./data:/var/lib/clickhouse
+      - ./config/clickhouse.xml:/etc/clickhouse-server/config.d/clickhouse.xml
+      - ./config/users.xml:/etc/clickhouse-server/users.d/users.xml
+
+  redis:
+      image: redis:6-alpine3.16
+      ports:
+        - "6379:6379"
+
+  app:
+    build: ./app
+    volumes:
+      - ./app:/app
+      - ./data:/data

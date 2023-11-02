@@ -1,0 +1,48 @@
+version: '3'
+services:
+  app:
+    build: ./app
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:81"
+
+  apache:
+    build: ./apache
+    volumes:
+      - ./apache:/usr/local/apache2/conf
+    ports:
+      - "8080:8080"
+
+  mysql:
+    build: ./mysql
+    volumes:
+      - ./mysql:/etc/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+#    ports:
+#      - "3306:3306"
+    ports:
+      - "3307:3306"
+    depends_on:
+      - redis
+
+  redis:
+    build: ./redis
+    volumes:
+      - ./redis:/data
+#    ports:
+#      - "6379:6379"
+    ports:
+      - "6380:6379"
+
